@@ -15,7 +15,7 @@ export default class Index extends Component {
         this.getCarouselList();
         this.renderCurrentCity();
     }
-    
+
     // 获取定位
     getLocation = () => {
         var myCity = new window.BMap.LocalCity();
@@ -66,17 +66,17 @@ export default class Index extends Component {
                                 }
                             });
                         }} >
-                            <span>{ this.state.city.label }</span>
+                            <span>{this.state.city.label}</span>
                             <i className="iconfont icon-jiantouarrow486"></i>
                         </div>
-                        <div className="search_input"  onClick={() => {
-                                this.props.history.push({
-                                    pathname: "/map",
-                                    state: {
-                                        city: this.state.city
-                                    }
-                                });
-                            }}>
+                        <div className="search_input" onClick={() => {
+                            this.props.history.push({
+                                pathname: "/map",
+                                state: {
+                                    city: this.state.city
+                                }
+                            });
+                        }}>
                             <i className="iconfont icon-sousuo"></i>
                             <span>请输入小区或地址</span>
                         </div>

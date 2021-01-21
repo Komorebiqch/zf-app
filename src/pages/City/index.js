@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TopNavBar from "../../component/TopNavBar";
+import TopNavBar from "../../components/TopNavBar";
 import "./index.scss";
 import { getCity, getHotCity } from "../../api/api";
 import { List } from "react-virtualized";

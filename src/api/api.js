@@ -42,6 +42,17 @@ export const getCurrentCity = params => {
     });
 }
 /**
+ * 
+ * @description 根据城市获取房源
+ */
+export const getHouseInfo = params => {
+    return request({
+        url: "/area/map",
+        method: "GET",
+        params
+    });
+}
+/**
  * @description 获取子级城市列表
  */
 export const getSubCity = params => {

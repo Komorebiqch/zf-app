@@ -13,14 +13,9 @@
         width: 100vw;
     }
 
-    .BMapLabel {
-        padding: 0;
-        border: none !important;
-        border-radius: 50%;
-
         .map_overlay {
-            width: 60px;
-            height: 60px;
+            width: 20vw;
+            height: 20vw;
             background-color: #21b97a;
             text-align: center;
             border-radius: 50%;
@@ -29,6 +24,19 @@
             justify-content: center;
             color: #fff;
         }
-    }
+
+        .map_overlay_15{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 8vw;
+            // width: 25vw;
+            padding: 0 3vw;
+            background-color: #21b97a;
+            color: #fff;
+            &>div:first-child {
+                margin-right: 5px;
+            }
+        }
 
 }
