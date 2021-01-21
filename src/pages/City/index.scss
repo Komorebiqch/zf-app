@@ -1,0 +1,57 @@
+.Area {
+    padding-top: 50px;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #fff;
+
+    .am-navbar {
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        width: 100%;
+        background-color: #F5F5F9;
+    }
+
+    .ReactVirtualized__Grid__innerScrollContainer {
+
+        &>div {
+            display: flex;
+            flex-direction: column;
+
+            // justify-content: space-evenly;
+            div {
+                flex: 1;
+            }
+        }
+    }
+
+    // .citylist {
+    //     height: 12vw;
+    //     line-height: 12vw;
+    // }
+    .city_index {
+        position: fixed;
+        right: 3vw;
+        top: 15vw;
+        height: 100%;
+        list-style: none;
+
+        li {
+            width: 5vw;
+            height: 5vw;
+            margin-bottom: 1vw;
+            text-align: center;
+            line-height: 5vw;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        .active {
+            background-color: #21b97a;
+        }
+    }
+
+    .cityindex {
+        color: #c3c3c3;
+    }
+}

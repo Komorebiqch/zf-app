@@ -1,0 +1,34 @@
+.map {
+    padding-top: 50px;
+
+    .am-navbar {
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        width: 100%;
+        background-color: #F5F5F9;
+    }
+
+    #container {
+        width: 100vw;
+    }
+
+    .BMapLabel {
+        padding: 0;
+        border: none !important;
+        border-radius: 50%;
+
+        .map_overlay {
+            width: 60px;
+            height: 60px;
+            background-color: #21b97a;
+            text-align: center;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #fff;
+        }
+    }
+
+}

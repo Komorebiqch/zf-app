@@ -30,3 +30,24 @@ export const getHotCity = () => {
         method: "GET"
     });
 }
+/**
+ * @description 根据城市名获取城市信息
+ * @param {String} name="上海" 
+ */
+export const getCurrentCity = params => {
+    return request({
+        url: "/area/info",
+        method: "GET",
+        params
+    });
+}
+/**
+ * @description 获取子级城市列表
+ */
+export const getSubCity = params => {
+    return request({
+        url: "/area",
+        method: "GET",
+        params
+    });
+}

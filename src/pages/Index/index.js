@@ -1,24 +1,46 @@
 import React, { Component } from 'react';
 import { Carousel } from 'antd-mobile';
 import "./index.scss";
-import { getCarousel } from "../../api/api";
+import { getCarousel, getCurrentCity } from "../../api/api";
 
 export default class Index extends Component {
     state = {
         data: [],
         imgHeight: 176,
-        flag: false
+        flag: false,
+        city: {}
     }
 
     componentDidMount() {
         this.getCarouselList();
+        this.renderCurrentCity();
+    }
+    
+    // 获取定位
+    getLocation = () => {
+        var myCity = new window.BMap.LocalCity();
+        return new Promise((resolve, reject) => {
+            myCity.get(result => {
+                var cityName = result.name;
+                resolve(cityName);
+            });
+        });
+    }
+
+    // 获取当前定位城市信息
+    renderCurrentCity = async () => {
+        const state = this.props.location.state;
+        const cityName = state ? state.city.label : await this.getLocation();
+        const currentCity = await getCurrentCity({ name: cityName });
+        this.setState({
+            city: currentCity.body
+        });
     }
 
     // 获取轮播图列表
     getCarouselList = async () => {
         try {
             const res = await getCarousel();
-            console.log(res);
             this.setState({
                 data: res.body
             }, () => {
@@ -36,11 +58,25 @@ export default class Index extends Component {
             <div className="index">
                 <div className="search">
                     <div className="left_search">
-                        <div className="select_area">
-                            <span>北京</span>
+                        <div className="select_area" onClick={() => {
+                            this.props.history.push({
+                                pathname: "/citylist",
+                                state: {
+                                    city: this.state.city
+                                }
+                            });
+                        }} >
+                            <span>{ this.state.city.label }</span>
                             <i className="iconfont icon-jiantouarrow486"></i>
                         </div>
-                        <div className="search_input">
+                        <div className="search_input"  onClick={() => {
+                                this.props.history.push({
+                                    pathname: "/map",
+                                    state: {
+                                        city: this.state.city
+                                    }
+                                });
+                            }}>
                             <i className="iconfont icon-sousuo"></i>
                             <span>请输入小区或地址</span>
                         </div>
