@@ -1,11 +1,14 @@
-.home{
-    height: 100vh;
+.home {
+    /* height: 100vh; */
+    padding-bottom: 50px;
 }
-.am-tab-bar-bar{
+
+.am-tab-bar-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
 }
-.iconfont{
+
+.iconfont {
     font-size: 18px;
 }

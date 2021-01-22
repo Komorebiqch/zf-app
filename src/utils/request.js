@@ -1,7 +1,7 @@
 import axios from "axios";
 const service = axios.create({
     baseURL: "http://api-haoke-web.itheima.net",
-    timeout: 5000
+    timeout: 20000
 });
 
 // 添加请求拦截器

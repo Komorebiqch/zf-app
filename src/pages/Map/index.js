@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
 import "./index.scss";
-import { Toast } from "antd-mobile"
+import { Toast, ActivityIndicator } from "antd-mobile"
 import TopNavBar from "../../components/TopNavBar";
-import { getSubCity, getHouseInfo } from "../../api/api";
+import { getSubCity, getHouseInfo, getHousesFilter } from "../../api/api";
 
 const BMap = window.BMap;
 const city = {};
-let mapScale = 11;
 
 export default class Map extends Component {
 
+    bottomAction = React.createRef();
+
     state = {
-        subCity: []
+        subCity: [],
+        showAction: false,
+        housesList: [],
+        actionContentLoading: false
     }
 
     componentDidMount() {
@@ -32,12 +36,15 @@ export default class Map extends Component {
 
     // 初始化地图
     initMap = async (subCity) => {
-        Toast.loading("加载中", 0);
         Object.assign(city, this.props.location.state.city);
-        // 给对象赋值一个map属性
-        console.log(subCity);
         const subCityLabel = subCity ? subCity.label : "";
+        // 给对象赋值一个map属性
         this.map = new BMap.Map("container");          // 创建地图实例  
+        this.map.addEventListener("dragstart", () => {
+            this.setState({
+                showAction: false
+            });
+        });
         var myGeo = new BMap.Geocoder();
         // 将地址解析结果显示在地图上，并调整地图视野  
         myGeo.getPoint(city.label + subCityLabel, point => {
@@ -47,7 +54,7 @@ export default class Map extends Component {
                 this.map.addControl(new BMap.NavigationControl());
                 this.map.addControl(new BMap.ScaleControl());
                 this.map.addControl(new BMap.MapTypeControl());
-                this.map.centerAndZoom(point, mapScale);
+                this.map.centerAndZoom(point, 11);
                 this.renderAddOverlays(subCity ? subCity.value : city.value);
             }
         }, city.label);
@@ -56,7 +63,10 @@ export default class Map extends Component {
 
     // 渲染地图覆盖物
     renderAddOverlays = async (id) => {
+        Toast.loading("加载中", 0);
         const res = await getHouseInfo({ id });
+        const zoom = this.map.getZoom();
+
         res.body.forEach(item => {
             var newPoint = new BMap.Point(item.coord.longitude, item.coord.latitude);
             // 创建文本标注对象
@@ -77,7 +87,7 @@ export default class Map extends Component {
                 border: "none",
                 borderRadius: "50%"
             });
-            if (mapScale === 15) {
+            if (zoom === 15) {
                 label.setContent(`
                 <div class="map_overlay_15">
                     <div>${item.label}</div>
@@ -90,9 +100,41 @@ export default class Map extends Component {
             }
 
             // 定义点击覆盖物点击事件
-            label.addEventListener("click", e => {
-                mapScale += 2;
-                this.initMap(item);
+            label.addEventListener("click", (e) => {
+                switch (zoom) {
+                    case 11: this.map.centerAndZoom(newPoint, 13); break;
+                    case 13: this.map.centerAndZoom(newPoint, 15); break;
+                    case 15:
+                        const bottomActionHeight = this.bottomAction.current.clientHeight;
+                        const centerX = window.innerWidth / 2;
+                        const centerY = (window.innerHeight - bottomActionHeight) / 2;
+                        const clientX = e.changedTouches[0].clientX;
+                        const clientY = e.changedTouches[0].clientY;
+                        Toast.loading("加载中", 0);
+                        this.setState({
+                            actionContentLoading: true,
+                            showAction: true
+                        });
+                        this.map.panBy(centerX - clientX, centerY - clientY);
+                        getHousesFilter({ cityId: item.value }).then(res => {
+                            this.setState({
+                                housesList: res.body.list
+                            });
+                        }).catch(err => {
+                            console.log(err);
+                        });
+                        Toast.hide();
+                        this.setState({
+                            actionContentLoading: false
+                        });
+                        return;
+                    default: break;
+                }
+                // 百度地图BUG,不加定时器报错
+                setTimeout(() => {
+                    this.map.clearOverlays();
+                }, 0);
+                this.renderAddOverlays(item.value);
             })
             this.map.addOverlay(label);
             Toast.hide();
@@ -103,7 +145,37 @@ export default class Map extends Component {
         return (
             <div className="map">
                 <TopNavBar title="地图找房" />
-                <div id="container" style={{ height: document.documentElement.clientHeight - 50 + "px" }}></div>
+                <div
+                    id="container"
+                    style={{ height: document.documentElement.clientHeight - 50 + "px" }}
+                >
+                </div>
+                <div ref={this.bottomAction} className={this.state.showAction ? "bottom_action show" : "bottom_action"}>
+                    <div className="action_title">
+                        <h5>房屋列表</h5>
+                        <p>更多房源</p>
+                    </div>
+                    <ul className="action_content">
+                        <ActivityIndicator animating={this.state.actionContentLoading} />
+                        {
+                            this.state.housesList.map(item => {
+                                return <li key={item.houseCode}>
+                                    <div className="action_content_left">
+                                        <img src={`http://api-haoke-web.itheima.net${item.houseImg}`} alt="" />
+                                    </div>
+                                    <div className="action_content_right">
+                                        <p>{item.title}</p>
+                                        <p>{item.desc}</p>
+                                        <p>
+                                            {item.tags.map(tagsItem => <span key={tagsItem}>{tagsItem}</span>)}
+                                        </p>
+                                        <h3>{item.price}<i>元/月</i></h3>
+                                    </div>
+                                </li>
+                            })
+                        }
+                    </ul>
+                </div>
             </div>
         )
     }

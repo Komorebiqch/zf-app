@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import { Carousel } from 'antd-mobile';
 import "./index.scss";
-import { getCarousel, getCurrentCity } from "../../api/api";
+import { getCarousel, getCurrentCity, getHouseGroup, getHouseNews } from "../../api/api";
 
 export default class Index extends Component {
     state = {
         data: [],
         imgHeight: 176,
         flag: false,
-        city: {}
+        city: {},
+        groupList: [],
+        newsList: []
     }
 
     componentDidMount() {
-        this.getCarouselList();
         this.renderCurrentCity();
+        this.getCarouselList();
+        // this.getHouseGroupList();
     }
 
     // 获取定位
@@ -34,6 +37,14 @@ export default class Index extends Component {
         const currentCity = await getCurrentCity({ name: cityName });
         this.setState({
             city: currentCity.body
+        }, async () => {
+            const group = await getHouseGroup({ area: this.state.city.value });
+            const news = await getHouseNews({ area: this.state.city.value });
+            this.setState({
+                groupList: group.body,
+                newsList: news.body
+            });
+            console.log(group, news);
         });
     }
 
@@ -51,6 +62,36 @@ export default class Index extends Component {
         } catch (err) {
             console.log(err);
         }
+    }
+
+    // 渲染租房小组
+    renderHouseGroup = () => {
+        return this.state.groupList.map(item => {
+            return <li key={item.id}>
+                <div className="items-left">
+                    <span>{item.title}</span>
+                    <span>{item.desc}</span>
+                </div>
+                <div className="items-right">
+                    <img src={`http://api-haoke-web.itheima.net${item.imgSrc}`} alt="" />
+                </div>
+            </li>
+        });
+    }
+
+    // 渲染资讯列表
+    renderNews = () => {
+        return this.state.newsList.map(item => {
+            return <li key={item.id}>
+                <div className="left">
+                    <img src={`http://api-haoke-web.itheima.net${item.imgSrc}`} alt="" />
+                </div>
+                <div className="right">
+                    <p>{item.title}</p>
+                    <p><span>{item.date}</span><span>{item.from}</span></p>
+                </div>
+            </li>
+        });
     }
 
     render() {
@@ -132,34 +173,13 @@ export default class Index extends Component {
                         <span>更多</span>
                     </div>
                     <ul className="items">
-                        <li>
-                            <div className="items-left">
-                                <span>家住回龙观</span>
-                                <span>归属的感觉</span>
-                            </div>
-                            <div className="items-right">图片</div>
-                        </li>
-                        <li>
-                            <div className="items-left">
-                                <span>家住回龙观</span>
-                                <span>归属的感觉</span>
-                            </div>
-                            <div className="items-right">图片</div>
-                        </li>
-                        <li>
-                            <div className="items-left">
-                                <span>家住回龙观</span>
-                                <span>归属的感觉</span>
-                            </div>
-                            <div className="items-right">图片</div>
-                        </li>
-                        <li>
-                            <div className="items-left">
-                                <span>家住回龙观</span>
-                                <span>归属的感觉</span>
-                            </div>
-                            <div className="items-right">图片</div>
-                        </li>
+                        {this.renderHouseGroup()}
+                    </ul>
+                </div>
+                <div className="news-items">
+                    <h3 className="title">最新资讯</h3>
+                    <ul className="items">
+                        {this.renderNews()}
                     </ul>
                 </div>
             </div>

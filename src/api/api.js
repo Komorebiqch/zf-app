@@ -22,6 +22,26 @@ export const getCity = (level = 1) => {
     });
 }
 /**
+ * @description 获取租房小组
+ */
+export const getHouseGroup = params => {
+    return request({
+        url: "/home/groups",
+        method: "GET",
+        params
+    });
+}
+/**
+ * @description 获取租房资讯
+ */
+export const getHouseNews = params => {
+    return request({
+        url: "/home/news",
+        method: "GET",
+        params
+    });
+}
+/**
  * @description 获取热门城市
  */
 export const getHotCity = () => {
@@ -58,6 +78,25 @@ export const getHouseInfo = params => {
 export const getSubCity = params => {
     return request({
         url: "/area",
+        method: "GET",
+        params
+    });
+}
+/**
+ * @description 获取房屋的具体信息
+ */
+export const getHouseDetail = id => {
+    return request({
+        url: `/houses/${id}`,
+        method: "GET"
+    });
+}
+/**
+ * @description 根据条件查询房屋
+ */
+export const getHousesFilter = params => {
+    return request({
+        url: "/houses",
         method: "GET",
         params
     });
