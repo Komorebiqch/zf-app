@@ -1,10 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import Filter from "../../components/Filter";
+import "./index.scss";
 
 export default class HouseList extends Component {
     render() {
         return (
             <div className="HouseList">
-                我是HouseList页面
+                <div className="houselist_title">
+                    <Filter />
+                </div>
             </div>
         )
     }
