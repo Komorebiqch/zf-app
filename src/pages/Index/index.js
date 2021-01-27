@@ -44,7 +44,6 @@ export default class Index extends Component {
                 groupList: group.body,
                 newsList: news.body
             });
-            console.log(group, news);
         });
     }
 

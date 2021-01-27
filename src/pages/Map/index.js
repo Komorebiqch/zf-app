@@ -42,7 +42,8 @@ export default class Map extends Component {
         this.map = new BMap.Map("container");          // 创建地图实例  
         this.map.addEventListener("dragstart", () => {
             this.setState({
-                showAction: false
+                showAction: false,
+                housesList: []
             });
         });
         var myGeo = new BMap.Geocoder();
