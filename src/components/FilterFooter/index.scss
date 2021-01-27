@@ -1,0 +1,32 @@
+.filterfooter {
+    display: flex;
+    width: 100%;
+
+    button:first-child {
+        box-sizing: border-box;
+        width: 130px;
+        height: 35px;
+        background-color: #fff;
+        outline: none;
+        border: none;
+        border-top: 1px solid rgb(219, 219, 219);
+        color: #22B879;
+
+        &:active {
+            background-color: rgb(235, 235, 235);
+        }
+    }
+
+    button:last-child {
+        flex: 1;
+        height: 35px;
+        background-color: #22B879;
+        color: #fff;
+        border: none;
+
+        &:active {
+            background-color: #06AE57;
+            color: #E6E6E6;
+        }
+    }
+}
