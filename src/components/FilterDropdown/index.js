@@ -115,10 +115,6 @@ export default class FilterDropdown extends Component {
         this.props.onOpenChange(false);
     }
 
-    onConfirm = () => {
-        this.props.onConfirm();
-    }
-
     showPicker = () => {
         if (this.state.open) {
             return <div>
@@ -129,7 +125,7 @@ export default class FilterDropdown extends Component {
                     data={province}
                     cascade={true}
                 />
-                <FilterFooter onCancel={this.onCancel} onConfirm={this.onConfirm} />
+                <FilterFooter onCancel={this.onCancel} onConfirm={this.props.onConfirm} />
             </div>
         } else {
             return null;

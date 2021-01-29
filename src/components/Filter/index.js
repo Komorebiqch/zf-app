@@ -15,7 +15,6 @@ export default class Filter extends Component {
     }
 
     onConfirm = () => {
-        console.log(1);
         this.setState({
             openDrop: false
         });
