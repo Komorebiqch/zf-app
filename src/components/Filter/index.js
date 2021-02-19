@@ -1,52 +1,107 @@
 import React, { Component } from 'react';
-import FilterDropdown from "../FilterDropdown";
+import FilterTitle from "../FilterTitle";
+import FilterPicker from "../FilterPicker";
+import FilterMore from "../FilterMore";
+import { getCondition } from "../../api/api";
 import "./index.scss";
+
+let titleActive = {
+    area: false,
+    rentType: false,
+    price: false,
+    more: false
+};
 
 export default class Filter extends Component {
 
     state = {
-        openDrop: false
+        titleActive,
+        currentStatus: "",
+        filterData: {}
     }
 
-    onOpenChange = flag => {
+    componentDidMount() {
+        this.getConditionList();
+    }
+
+    changeTitleActive = status => {
         this.setState({
-            openDrop: flag
+            titleActive: {
+                ...titleActive,
+                [status]: true
+            },
+            currentStatus: status
         });
     }
 
-    onConfirm = () => {
+    // 获取房屋查询条件
+    getConditionList = async () => {
+        try {
+            const res = await getCondition({
+                id: JSON.parse(localStorage.getItem("current_city")).value
+            });
+            this.setState({
+                filterData: res.body
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // 点击遮罩层关闭所有弹窗
+    closeFilter = () => {
         this.setState({
-            openDrop: false
+            titleActive,
+            currentStatus: ""
         });
+    }
+
+    // 点击关闭按钮
+    onCancel = (length, item) => {
+        this.setState({
+            titleActive: {
+                ...titleActive,
+                [item]: !!length
+            },
+            currentStatus: ""
+        });
+    }
+
+    // 点击确认按钮
+    onConfirm = (flag, item) => {
+        console.log(flag, item);
+        titleActive = {
+            ...titleActive,
+            [item]: flag
+        };
+        this.setState({
+            titleActive,
+            currentStatus: ""
+        });
+        // console.log(flag, item);
     }
 
     render() {
+        const { titleActive, currentStatus, filterData } = this.state;
+        const activeMask = titleActive[currentStatus] ? "mask_active" : "";
+        const current = activeMask ? currentStatus : "";
         return (
             <div className="filter">
-                <div className="title">
-                    <div className="filter_title title_active" onClick={() => this.setState({ openDrop: true })}>
-                        <span>区域</span>
-                        <i className="iconfont icon-jiantouarrow486 title_active"></i>
-                    </div>
-                    <div className="filter_title">
-                        <span>区域</span>
-                        <i className="iconfont icon-jiantouarrow486"></i>
-                    </div>
-                    <div className="filter_title">
-                        <span>区域</span>
-                        <i className="iconfont icon-jiantouarrow486"></i>
-                    </div>
-                    <div className="filter_title">
-                        <span>区域</span>
-                        <i className="iconfont icon-jiantouarrow486"></i>
-                    </div>
-                </div>
-                <FilterDropdown className="dropdown"
-                    onOpenChange={this.onOpenChange}
+                <FilterTitle titleStatus={titleActive} changeTitleActive={this.changeTitleActive} />
+                {/* {this.renderFilter()} */}
+                <FilterPicker
+                    titleStatus={titleActive}
+                    currentStatus={current}
+                    filterData={filterData[current]}
+                    onCancel={this.onCancel}
                     onConfirm={this.onConfirm}
-                    open={this.state.openDrop}
                 />
-            </div >
+                <FilterMore
+                    titleStatus={titleActive}
+                    currentStatus={current}
+                />
+                <div className={"mask " + activeMask} onClick={this.closeFilter} ></div>
+            </div>
         )
     }
 }

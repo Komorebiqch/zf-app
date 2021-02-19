@@ -35,6 +35,7 @@ export default class Index extends Component {
         const state = this.props.location.state;
         const cityName = state ? state.city.label : await this.getLocation();
         const currentCity = await getCurrentCity({ name: cityName });
+        localStorage.setItem("currentCity",JSON.stringify(currentCity.body));
         this.setState({
             city: currentCity.body
         }, async () => {
@@ -44,7 +45,6 @@ export default class Index extends Component {
                 groupList: group.body,
                 newsList: news.body
             });
-            console.log(group, news);
         });
     }
 

@@ -1,0 +1,17 @@
+.filterpicker {
+    position: relative;
+    overflow: hidden;
+
+    .dropdown {
+        height: 0;
+        overflow: hidden;
+        background-color: #fff;
+        transition: all .2s;
+    }
+
+    .filterfooter {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+}

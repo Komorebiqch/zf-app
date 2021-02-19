@@ -101,3 +101,13 @@ export const getHousesFilter = params => {
         params
     });
 }
+/**
+ * @description 获取房屋查询条件
+ */
+export const getCondition = params => {
+    return request({
+        url: "/houses/condition",
+        method: "GET",
+        params
+    });
+}
