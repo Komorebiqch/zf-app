@@ -85,6 +85,7 @@ export default class Filter extends Component {
         const { titleActive, currentStatus, filterData } = this.state;
         const activeMask = titleActive[currentStatus] ? "mask_active" : "";
         const current = activeMask ? currentStatus : "";
+        const { area, rentType, price, ...newData } = filterData;
         return (
             <div className="filter">
                 <FilterTitle titleStatus={titleActive} changeTitleActive={this.changeTitleActive} />
@@ -99,6 +100,7 @@ export default class Filter extends Component {
                 <FilterMore
                     titleStatus={titleActive}
                     currentStatus={current}
+                    filterData={newData}
                 />
                 <div className={"mask " + activeMask} onClick={this.closeFilter} ></div>
             </div>

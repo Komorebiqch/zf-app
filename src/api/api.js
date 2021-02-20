@@ -111,3 +111,13 @@ export const getCondition = params => {
         params
     });
 }
+/**
+ * @description 根据条件查询房屋
+ */
+export const getHouses = params => {
+    return request({
+        url: "/houses",
+        method: "GET",
+        params
+    });
+}

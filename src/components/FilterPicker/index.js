@@ -3,6 +3,12 @@ import { PickerView } from "antd-mobile";
 import FilterFooter from "../FilterFooter";
 import "./index.scss";
 
+let newArr = {
+        area: [],
+        rentType: [],
+        price: []
+};
+
 export default class FilterPicker extends Component {
 
     state = {
@@ -12,7 +18,7 @@ export default class FilterPicker extends Component {
         filterData: []
     }
 
-    static getDerivedStateFromProps(nextProps) {
+    static getDerivedStateFromProps(nextProps){
         let filterData = nextProps.filterData ? nextProps.filterData : [];
         if (nextProps.currentStatus === "area") {
             filterData = filterData.children;
@@ -24,10 +30,7 @@ export default class FilterPicker extends Component {
 
     onChange = (value) => {
         const { currentStatus } = this.props;
-        const newArr = value[0] === "null" ? [] : value;
-        this.setState({
-            [currentStatus]: newArr
-        });
+        newArr[currentStatus] = value[0] === "null" ? [] : value;
     }
 
     // onScrollChange = (value) => {
@@ -35,8 +38,13 @@ export default class FilterPicker extends Component {
     // }
 
     onConfirm = () => {
-        const titleActive = !!this.state[this.props.currentStatus].length;
-        this.props.onConfirm(titleActive, this.props.currentStatus);
+        const { currentStatus } = this.props;
+        this.setState({
+            [currentStatus]: newArr[currentStatus]
+        }, () => {
+                const titleActive = !!this.state[currentStatus].length;
+                this.props.onConfirm(titleActive, currentStatus);
+        });
     }
 
     render() {

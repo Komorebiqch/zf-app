@@ -109,8 +109,13 @@ export default class Map extends Component {
                         const bottomActionHeight = this.bottomAction.current.clientHeight;
                         const centerX = window.innerWidth / 2;
                         const centerY = (window.innerHeight - bottomActionHeight) / 2;
-                        const clientX = e.changedTouches[0].clientX;
-                        const clientY = e.changedTouches[0].clientY;
+                        console.log(e);
+                        let clientX = e.clientX;
+                        let clientY = e.clientY;
+                        if (e.changedTouches) {
+                            clientX = e.changedTouches[0].clientX;
+                            clientY = e.changedTouches[0].clientY;
+                        }
                         Toast.loading("加载中", 0);
                         this.setState({
                             actionContentLoading: true,

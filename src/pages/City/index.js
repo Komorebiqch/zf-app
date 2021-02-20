@@ -117,13 +117,14 @@ export default class Area extends Component {
                     return <div
                         key={item.value} className="citylist"
                         onClick={() => {
-                            return this.props.history.push(
+                            this.props.history.push(
                                 {
                                     pathname: "/home/index",
                                     state: {
                                         city: item
                                     }
                                 });
+                            localStorage.setItem("current_city",JSON.stringify(item));
                         }}
                     >
                         {item.label}
