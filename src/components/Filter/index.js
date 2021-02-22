@@ -69,7 +69,6 @@ export default class Filter extends Component {
 
     // 点击确认按钮
     onConfirm = (flag, item) => {
-        console.log(flag, item);
         titleActive = {
             ...titleActive,
             [item]: flag

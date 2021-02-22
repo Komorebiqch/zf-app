@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import Filter from "../../components/Filter";
 import { List } from 'react-virtualized';
+import store from "../../store/index";
 import { getHouses } from "../../api/api";
 import "./index.scss";
 
 export default class HouseList extends Component {
 
     state = {
-        list: []
+        list: [],
+        inquire: { ...store.getState() }
     }
 
     componentDidMount() {
+        this.getHousesList();
+        store.subscribe(this.changeStore);
+    }
+
+    changeStore = () => {
         this.getHousesList();
     }
 
@@ -41,8 +48,12 @@ export default class HouseList extends Component {
 
     // 获取房屋列表
     getHousesList = async () => {
+        const state = store.getState();
         const res = await getHouses({
-            cityId: JSON.parse(localStorage.getItem("current_city")).value
+            cityId: JSON.parse(localStorage.getItem("current_city")).value,
+            area: state.area.toString(),
+            rentType: state.rentType.toString(),
+            price: state.price.toString()
         });
         this.setState({
             list: res.body.list

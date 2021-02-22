@@ -1,24 +1,35 @@
 import React, { Component } from 'react';
 import { PickerView } from "antd-mobile";
 import FilterFooter from "../FilterFooter";
+import store from "../../store/index";
 import "./index.scss";
 
 let newArr = {
-        area: [],
-        rentType: [],
-        price: []
+    area: [],
+    rentType: [],
+    price: []
 };
 
 export default class FilterPicker extends Component {
+    constructor(props) {
+        super(props);
+        store.subscribe(this.changeStore);
+    }
 
     state = {
-        area: [],
-        rentType: [],
-        price: [],
+        ...store.getState(),
         filterData: []
     }
 
-    static getDerivedStateFromProps(nextProps){
+    changeStore = () => {
+        const { currentStatus } = this.props;
+        this.setState(store.getState(), () => {
+            const titleActive = !!this.state[currentStatus].length;
+            this.props.onConfirm(titleActive, currentStatus);
+        });
+    }
+
+    static getDerivedStateFromProps(nextProps) {
         let filterData = nextProps.filterData ? nextProps.filterData : [];
         if (nextProps.currentStatus === "area") {
             filterData = filterData.children;
@@ -39,12 +50,24 @@ export default class FilterPicker extends Component {
 
     onConfirm = () => {
         const { currentStatus } = this.props;
-        this.setState({
-            [currentStatus]: newArr[currentStatus]
-        }, () => {
-                const titleActive = !!this.state[currentStatus].length;
-                this.props.onConfirm(titleActive, currentStatus);
-        });
+        const action = {
+            type: currentStatus,
+            value: newArr[currentStatus]
+        }
+        // new Promise((resolve, reject) => {
+        store.dispatch(action);
+        // resolve();
+        // }).then(() => {
+
+        // });
+
+
+        // this.setState({
+        //     [currentStatus]: newArr[currentStatus]
+        // }, () => {
+        //     const titleActive = !!this.state[currentStatus].length;
+        //     this.props.onConfirm(titleActive, currentStatus);
+        // });
     }
 
     render() {

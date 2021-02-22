@@ -9,6 +9,7 @@
     background-color: #fff;
     transition: transform .3s;
     transform: translateX(1000px);
+    z-index: 1;
 
     .filtermore_body {
         margin-top: 5vw;
