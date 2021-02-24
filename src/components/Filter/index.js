@@ -84,15 +84,19 @@ export default class Filter extends Component {
         const { titleActive, currentStatus, filterData } = this.state;
         const activeMask = titleActive[currentStatus] ? "mask_active" : "";
         const current = activeMask ? currentStatus : "";
-        const { area, rentType, price, ...newData } = filterData;
+        const { area, subway, rentType, price, ...newData } = filterData;
+        const pickerData = {
+            area: [area, subway],
+            rentType,
+            price
+        };
         return (
             <div className="filter">
                 <FilterTitle titleStatus={titleActive} changeTitleActive={this.changeTitleActive} />
-                {/* {this.renderFilter()} */}
                 <FilterPicker
                     titleStatus={titleActive}
                     currentStatus={current}
-                    filterData={filterData[current]}
+                    filterData={pickerData[current]}
                     onCancel={this.onCancel}
                     onConfirm={this.onConfirm}
                 />

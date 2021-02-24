@@ -1,4 +1,9 @@
+* {
+    touch-action: pan-y;
+}
+
 .index {
+
     position: relative;
 
     .search {

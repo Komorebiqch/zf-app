@@ -1,17 +1,20 @@
 .filtermore {
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     float: right;
     width: 80%;
     box-sizing: border-box;
-    padding: 0 5vw;
-    height: calc(100vh - 90px);
+    // padding: 0 5vw;
+    height: calc(100vh - 89px);
+    margin-bottom: 1px;
     background-color: #fff;
-    transition: transform .3s;
-    transform: translateX(1000px);
+    transition: transform .4s;
+    transform: translateX(100%);
     z-index: 1;
 
     .filtermore_body {
+        margin: 0 5vw;
         margin-top: 5vw;
 
         .select_item {
@@ -20,6 +23,10 @@
             border-bottom: 1px solid #ccc;
             display: flex;
             flex-wrap: wrap;
+
+            &:last-child {
+                border: none;
+            }
 
             dd {
                 box-sizing: border-box;
@@ -36,9 +43,10 @@
     }
 
     .filterfooter {
-        position: absolute;
+        position: sticky;
+        width: 100%;
         left: 0;
-        bottom: 0;
+        bottom: -1px;
     }
 }
 

@@ -31,9 +31,6 @@ export default class FilterPicker extends Component {
 
     static getDerivedStateFromProps(nextProps) {
         let filterData = nextProps.filterData ? nextProps.filterData : [];
-        if (nextProps.currentStatus === "area") {
-            filterData = filterData.children;
-        }
         return {
             filterData
         }
@@ -44,30 +41,13 @@ export default class FilterPicker extends Component {
         newArr[currentStatus] = value[0] === "null" ? [] : value;
     }
 
-    // onScrollChange = (value) => {
-    //     console.log(value);
-    // }
-
     onConfirm = () => {
         const { currentStatus } = this.props;
         const action = {
             type: currentStatus,
             value: newArr[currentStatus]
         }
-        // new Promise((resolve, reject) => {
         store.dispatch(action);
-        // resolve();
-        // }).then(() => {
-
-        // });
-
-
-        // this.setState({
-        //     [currentStatus]: newArr[currentStatus]
-        // }, () => {
-        //     const titleActive = !!this.state[currentStatus].length;
-        //     this.props.onConfirm(titleActive, currentStatus);
-        // });
     }
 
     render() {
@@ -83,7 +63,6 @@ export default class FilterPicker extends Component {
                 >
                     <PickerView
                         onChange={this.onChange}
-                        // onScrollChange={this.onScrollChange}
                         value={this.state[currentStatus]}
                         data={this.state.filterData}
                         cascade={this.props.currentStatus === "area"}
